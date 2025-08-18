@@ -7,6 +7,7 @@ import webbrowser
 
 from PyQt5.QtCore import Qt
 from PyQt5 import QtGui, QtWidgets
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -45,91 +46,75 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
            MainFornecedor, MainConfig, Financeiro, Comercial, Fornecedor,
            Clientes, FormaPagamento, CategoriaAPagar, CategoriaAReceber, MainLogin):
 
+        
+
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
-
-        self.setupUi(self)
-
-        self.centralizar()  # Centrelizando na tela
-
-        # Background
-        palete = QtGui.QPalette()
-        image = QtGui.QPixmap(self.resourcepath('Images/bg.png'))
-        brush = QtGui.QBrush(image)
-        palete.setBrush(QtGui.QPalette.Background, brush)
-        self.setPalette(palete)
+        self.setupUi(self)  # Use apenas este, remova self.ui
         
+        print("🟢 Iniciando aplicação")
+        
+        # Caminho absoluto da imagem
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(base_dir, 'Images', 'bg.png')
+
+        print(f"🔍 Caminho da imagem: {image_path}")
+        pixmap = QtGui.QPixmap(image_path)
+
+        if pixmap.isNull():
+            print("❌ Erro ao carregar imagem")
+        else:
+            # Cria um QLabel para o fundo
+            label_fundo = QtWidgets.QLabel(self)
+            label_fundo.setPixmap(pixmap)
+            label_fundo.setGeometry(0, 0, self.width(), self.height())
+            label_fundo.lower()  # envia para trás
+            
+            print("✅ Fundo aplicado com QLabel")
+
+        # Centralizar janela
+        self.centralizar()
 
         # Caminho Absoluto
         self.caminho = os.path.abspath(os.path.dirname(sys.argv[0]))
 
-        # Icone dos botoes Topo
-        self.IconeBotaoTopo(self.bt_Home, self.resourcepath(
-            'Images/home.png'))  # HOme
-                
-        self.IconeBotaoTopo(self.bt_Exit, self.resourcepath(
-            'Images/exit.png'))  # Sair
+        # Icone dos botoes Topo (REMOVA self.ui. de todas as referências)
+        self.IconeBotaoTopo(self.bt_Home, self.resourcepath('Images/home.png'))
+        self.IconeBotaoTopo(self.bt_Exit, self.resourcepath('Images/exit.png'))
 
-        # Icone botoes menu
-        self.IconeBotaoMenu(self.bt_Clientes, self.resourcepath(
-            'Images/tag-new.png'))  # Clientes
-        self.IconeBotaoMenu(self.bt_Vendas, self.resourcepath(
-            'Images/vendas.png'))  # Vendas
-        self.IconeBotaoMenu(self.bt_Fornecedor, self.resourcepath(
-            'Images/iconFornecedor.png'))  # Fornecedor
-        self.IconeBotaoMenu(self.bt_MainProdutos, self.resourcepath(
-            'Images/estoque.png'))  # Produtos
-        self.IconeBotaoMenu(self.bt_Compras, self.resourcepath(
-            'Images/ico-compras.png'))  # Compras
-        self.IconeBotaoMenu(self.bt_Financeiro, self.resourcepath(
-            'Images/financeiro.png'))  # Financeiro
-        self.IconeBotaoMenu(self.bt_Conf, self.resourcepath(
-            'Images/conf.png'))  # Configuracao
+        # Icone botoes menu (REMOVA self.ui. de todas as referências)
+        self.IconeBotaoMenu(self.bt_Clientes, self.resourcepath('Images/tag-new.png'))
+        self.IconeBotaoMenu(self.bt_Vendas, self.resourcepath('Images/vendas.png'))
+        self.IconeBotaoMenu(self.bt_Fornecedor, self.resourcepath('Images/iconFornecedor.png'))
+        self.IconeBotaoMenu(self.bt_MainProdutos, self.resourcepath('Images/estoque.png'))
+        self.IconeBotaoMenu(self.bt_Compras, self.resourcepath('Images/ico-compras.png'))
+        self.IconeBotaoMenu(self.bt_Financeiro, self.resourcepath('Images/financeiro.png'))
+        self.IconeBotaoMenu(self.bt_Conf, self.resourcepath('Images/conf.png'))
 
-        
-        """Ação dos Botões Botoes"""
-        # Home
+        # Ação dos Botões (REMOVA self.ui. de todas as referências)
         self.bt_Home.clicked.connect(self.janelaHome)
-
-        # Produtos
         self.bt_MainProdutos.clicked.connect(self.janelaProdutos)
-
-        # Vendas
         self.bt_Vendas.clicked.connect(self.janelaVendas)
-
-        # Clientes
         self.bt_Clientes.clicked.connect(self.janelaClientes)
-
-        # Compras
         self.bt_Compras.clicked.connect(self.janelaCompras)
-
-        # Fornecedor
         self.bt_Fornecedor.clicked.connect(self.janelaFornecedor)
-
-        # Financeiro
         self.bt_Financeiro.clicked.connect(self.janelaFinanceiro)
-
-        # Config
         self.bt_Conf.clicked.connect(self.janelaConfig)
-
-        # Meus dados
         self.bt_alterSenha.clicked.connect(self.editarUser)
-
-        # Logout
         self.bt_logout.clicked.connect(self.janelaLogin)
-        """ Fim Botoes """
 
-        # Setando data no Header
+        # Setando data no Header (REMOVA self.ui. de todas as referências)
         data = DataAtual()
         data.diaAtual()
         self.lb_Data.setText(data.diames)
         self.lb_DiaSemana.setText(data.diasemana)
 
-        # Abrindo tela Login
-        self.janelaLogin()
+        # Checando banco de dados
+        self.DbCheck()
         
-        # Checando conexao com banco de dados
-        self.DbCheck()  # Checando banco de dados
+        print("🔧 Janela criada, mostrando...")
+        self.show()
+        print("✅ show() chamado")
 
         
     # Caminho absoluto
@@ -148,6 +133,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         qr.moveCenter(cp)
         # top left of rectangle becomes top left of window centering it
         self.move(qr.topLeft())
+        #self.centralizar() 
 
     # Verificando Banco de Dados
     def DbCheck(self):
@@ -161,7 +147,8 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
             self.lb_NomeFantasia2.setText(busca.subtitulo)
             self.setWindowTitle(busca.titulo + " " + busca.subtitulo)
             
-        except:
+        except Exception as e:
+            print(f"Erro ao buscar empresa: {e}")
            
             pass
         
@@ -182,72 +169,72 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
 
     # Login
     def janelaLogin(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
 
         # Limpando nome de usuário logado
-        self.lb_userName.clear()
+        self.ui.lb_userName.clear()
 
         # Desabilitando Botao Meus Dados e Logout
-        self.bt_alterSenha.setDisabled(True)
-        self.bt_logout.setDisabled(True)
-        self.bt_Home.setDisabled(True)
+        self.ui.bt_alterSenha.setDisabled(True)
+        self.ui.bt_logout.setDisabled(True)
+        self.ui.bt_Home.setDisabled(True)
 
         # Ocultando botoes
-        for filho in self.wd_menu.findChildren(QtWidgets.QPushButton):
+        for filho in self.ui.wd_menu.findChildren(QtWidgets.QPushButton):
             filho.setHidden(True)
         
         # Desabilitando botao Home
-        # self.bt_Home.setDisabled(True)
-        self.mainlogin(self.ct_conteudo)
+        self.ui.bt_Home.setDisabled(True)
+        self.mainlogin(self.ui.ct_conteudo)
 
     # Home
     def janelaHome(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.ativaBotoes(self.wd_menu)
-        self.main_home(self.ct_conteudo)
+        self.main_home(self.ui.ct_conteudo)
 
     # Main Produtos
 
     def janelaProdutos(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_MainProdutos)
-        self.mainprodutos(self.ct_conteudo)
+        self.mainprodutos(self.ui.ct_conteudo)
 
     # Main Vendas
     def janelaVendas(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Vendas)
-        self.mainvendas(self.ct_conteudo)
+        self.mainvendas(self.ui.ct_conteudo)
 
     # Main Cliente
     def janelaClientes(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Clientes)
-        self.mainclientes(self.ct_conteudo)
+        self.mainclientes(self.ui.ct_conteudo)
 
     # Main Fornecedor
     def janelaFornecedor(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Fornecedor)
-        self.mainfornecedor(self.ct_conteudo)
+        self.mainfornecedor(self.ui.ct_conteudo)
 
     # Main Compras
     def janelaCompras(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Compras)
-        self.maincompras(self.ct_conteudo)
+        self.maincompras(self.ui.ct_conteudo)
 
     # Main Financeiro
     def janelaFinanceiro(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Financeiro)
-        self.mainfinanceiro(self.ct_conteudo)
+        self.mainfinanceiro(self.ui.ct_conteudo)
 
     # Main Configuração
     def janelaConfig(self):
-        self.LimpaFrame(self.ct_conteudo)
+        self.LimpaFrame(self.ui.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Conf)
-        self.mainconfig(self.ct_conteudo)
+        self.mainconfig(self.ui.ct_conteudo)
     
     def editarUser(self):
         self.janelaConfig()
@@ -290,7 +277,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         # item.setFixedHeight(30)
         item.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
         item.setFocusPolicy(Qt.NoFocus)
-        item.setFlat(Qt.NoItemFlags)
+        item.setFlat(True)
         item.setStyleSheet("QPushButton{\n"
                            "background-color: #1E87F0;\n"
                            "border-radius: 2px;\n"
@@ -572,7 +559,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
 
     # Imprimindo em pdf
     def previaImpressao(self, arg):
-        self.documento.page().printToPdf(self.resourcepath('report.pdf'))
+        self.documento = QtWebEngineWidgets.QWebEngineView()
         self.documento.page().pdfPrintingFinished.connect(self.okPrinter)
         
 
@@ -610,6 +597,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    main_window = Main()
-    main_window.show()
-    app.exec_()
+    window = Main()
+    print("🚀 Iniciando loop de eventos...")
+    sys.exit(app.exec_())

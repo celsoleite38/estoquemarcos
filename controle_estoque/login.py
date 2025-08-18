@@ -19,10 +19,10 @@ class MainLogin(Ui_ct_login):
         self.tx_user.setFocus()
 
         global grupo
-        grupo = {0: {self.bt_Vendas, self.bt_Clientes},
-                 1: {self.bt_Fornecedor,
-                     self.bt_MainProdutos, self.bt_Compras},
-                 2: {self.bt_Financeiro}, 3: {self.bt_Conf}}
+        grupo = {0: {self.ui.bt_Vendas, self.ui.bt_Clientes},
+                 1: {self.ui.bt_Fornecedor,
+                     self.ui.bt_MainProdutos, self.ui.bt_Compras},
+                 2: {self.ui.bt_Financeiro}, 3: {self.ui.bt_Conf}}
 
         self.index = {1: self.janelaVendas, 2: self.janelaCompras,
                       3: self.janelaHome, 4: self.janelaHome}
