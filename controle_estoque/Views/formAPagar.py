@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'formAPagar.ui',
-# licensing of 'formAPagar.ui' applies.
-#
-# Created: Fri Mar 15 09:21:21 2019
-#      by: PyQt5-uic  running on PyQt5 5.12.1
-#
-# WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 

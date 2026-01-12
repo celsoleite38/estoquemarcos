@@ -358,7 +358,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate(
-            "MainWindow", "Azul e Rosa Personalizados"))
+            "MainWindow", "Sistema Loja de Controle de Estoque-Caixa"))
         self.lb_Data.setText(_translate("MainWindow", "25/11"))
         self.lb_DiaSemana.setText(_translate("MainWindow", "DOMINGO"))
         self.bt_Home.setToolTip(_translate("MainWindow", "Tela Inicial"))

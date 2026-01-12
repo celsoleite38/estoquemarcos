@@ -109,7 +109,13 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         self.lb_Data.setText(data.diames)
         self.lb_DiaSemana.setText(data.diasemana)
         
-        self.janelaLogin()
+        try:
+            self.janelaLogin()
+            print("✅ janelaLogin() executada sem crash")
+        except Exception as e:
+            print(f"❌ ERRO em janelaLogin(): {e}")
+            import traceback
+            traceback.print_exc()
 
         
         self.show()
@@ -599,8 +605,24 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         return html
 
 
+import traceback
+
+def excepthook(exc_type, exc_value, exc_traceback):
+    print("\n" + "="*60)
+    print("💥💥💥 ERRO NÃO TRATADO - PROGRAMA CRASHOU 💥💥💥")
+    print("="*60)
+    traceback.print_exception(exc_type, exc_value, exc_traceback)
+    print("="*60)
+    print("\nPressione Enter para sair...")
+    input()
+    sys.exit(1)
+
+sys.excepthook = excepthook
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = Main()
     print("🚀 Iniciando loop de eventos...")
     sys.exit(app.exec_())
+
+

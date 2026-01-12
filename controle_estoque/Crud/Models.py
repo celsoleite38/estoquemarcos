@@ -1,8 +1,8 @@
 # coding=utf-8
 
 from sqlalchemy import Column, String, Integer, Numeric, ForeignKey, Date
-from sqlalchemy.dialects.mysql import LONGBLOB
-
+#from sqlalchemy.dialects.mysql import LONGBLOB
+from sqlalchemy import LargeBinary
 
 from Crud.core import Base
 
@@ -78,7 +78,7 @@ class Produto(Base):
     __tablename__ = 'produto'
     id = Column(Integer, primary_key=True)
     produto = Column(String(80), index=True)
-    imagem = Column(LONGBLOB(length=None))
+    imagem = Column(LargeBinary)
     categoria = Column(Integer, ForeignKey('categoria_produto.id'))
     marca = Column(Integer, ForeignKey('marca_produto.id'))
     estoque_minimo = Column(Integer, default=0)
@@ -241,7 +241,7 @@ class Empresa(Base):
     estado = Column(String(2))
     titulo = Column(String(50))
     subtitulo = Column(String(80))
-    logo = Column(LONGBLOB(length=None))
+    logo = Column(LargeBinary)
 
     def __repr__(self):
         return self.nome_fantasia
