@@ -3,7 +3,7 @@ import os
 import sys
 import random
 import webbrowser
-
+#import Images
 
 from PyQt5.QtCore import Qt
 from PyQt5 import QtGui, QtWidgets
@@ -38,7 +38,7 @@ from Views.main import Ui_MainWindow
 
 
 # Icons 
-import Images
+
 
 
 class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
@@ -50,7 +50,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
 
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
-        self.setupUi(self)  # Use apenas este, remova self.ui
+        self.setupUi(self) 
         
         print("🟢 Iniciando aplicação")
         
@@ -78,11 +78,11 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         # Caminho Absoluto
         self.caminho = os.path.abspath(os.path.dirname(sys.argv[0]))
 
-        # Icone dos botoes Topo (REMOVA self.ui. de todas as referências)
+        
         self.IconeBotaoTopo(self.bt_Home, self.resourcepath('Images/home.png'))
         self.IconeBotaoTopo(self.bt_Exit, self.resourcepath('Images/exit.png'))
 
-        # Icone botoes menu (REMOVA self.ui. de todas as referências)
+        
         self.IconeBotaoMenu(self.bt_Clientes, self.resourcepath('Images/tag-new.png'))
         self.IconeBotaoMenu(self.bt_Vendas, self.resourcepath('Images/vendas.png'))
         self.IconeBotaoMenu(self.bt_Fornecedor, self.resourcepath('Images/iconFornecedor.png'))
@@ -91,7 +91,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         self.IconeBotaoMenu(self.bt_Financeiro, self.resourcepath('Images/financeiro.png'))
         self.IconeBotaoMenu(self.bt_Conf, self.resourcepath('Images/conf.png'))
 
-        # Ação dos Botões (REMOVA self.ui. de todas as referências)
+        
         self.bt_Home.clicked.connect(self.janelaHome)
         self.bt_MainProdutos.clicked.connect(self.janelaProdutos)
         self.bt_Vendas.clicked.connect(self.janelaVendas)
@@ -103,18 +103,22 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
         self.bt_alterSenha.clicked.connect(self.editarUser)
         self.bt_logout.clicked.connect(self.janelaLogin)
 
-        # Setando data no Header (REMOVA self.ui. de todas as referências)
+        
         data = DataAtual()
         data.diaAtual()
         self.lb_Data.setText(data.diames)
         self.lb_DiaSemana.setText(data.diasemana)
-
-        # Checando banco de dados
-        self.DbCheck()
         
-        print("🔧 Janela criada, mostrando...")
+        self.janelaLogin()
+
+        
         self.show()
         print("✅ show() chamado")
+        
+        # Checando banco de dados
+        #self.DbCheck()
+        print("🔧 Janela criada, mostrando...")
+        
 
         
     # Caminho absoluto
@@ -169,72 +173,72 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow, MainHome, MainProdutos,
 
     # Login
     def janelaLogin(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
 
         # Limpando nome de usuário logado
-        self.ui.lb_userName.clear()
+        self.lb_userName.clear()
 
         # Desabilitando Botao Meus Dados e Logout
-        self.ui.bt_alterSenha.setDisabled(True)
-        self.ui.bt_logout.setDisabled(True)
-        self.ui.bt_Home.setDisabled(True)
+        self.bt_alterSenha.setDisabled(True)
+        self.bt_logout.setDisabled(True)
+        self.bt_Home.setDisabled(True)
 
         # Ocultando botoes
-        for filho in self.ui.wd_menu.findChildren(QtWidgets.QPushButton):
+        for filho in self.wd_menu.findChildren(QtWidgets.QPushButton):
             filho.setHidden(True)
         
         # Desabilitando botao Home
-        self.ui.bt_Home.setDisabled(True)
-        self.mainlogin(self.ui.ct_conteudo)
+        self.bt_Home.setDisabled(True)
+        self.mainlogin(self.ct_conteudo)
 
     # Home
     def janelaHome(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.ativaBotoes(self.wd_menu)
-        self.main_home(self.ui.ct_conteudo)
+        self.main_home(self.ct_conteudo)
 
     # Main Produtos
 
     def janelaProdutos(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_MainProdutos)
-        self.mainprodutos(self.ui.ct_conteudo)
+        self.mainprodutos(self.ct_conteudo)
 
     # Main Vendas
     def janelaVendas(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Vendas)
-        self.mainvendas(self.ui.ct_conteudo)
+        self.mainvendas(self.ct_conteudo)
 
     # Main Cliente
     def janelaClientes(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Clientes)
-        self.mainclientes(self.ui.ct_conteudo)
+        self.mainclientes(self.ct_conteudo)
 
     # Main Fornecedor
     def janelaFornecedor(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Fornecedor)
-        self.mainfornecedor(self.ui.ct_conteudo)
+        self.mainfornecedor(self.ct_conteudo)
 
     # Main Compras
     def janelaCompras(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Compras)
-        self.maincompras(self.ui.ct_conteudo)
+        self.maincompras(self.ct_conteudo)
 
     # Main Financeiro
     def janelaFinanceiro(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Financeiro)
-        self.mainfinanceiro(self.ui.ct_conteudo)
+        self.mainfinanceiro(self.ct_conteudo)
 
     # Main Configuração
     def janelaConfig(self):
-        self.LimpaFrame(self.ui.ct_conteudo)
+        self.LimpaFrame(self.ct_conteudo)
         self.DesativaBotao(self.wd_menu, self.bt_Conf)
-        self.mainconfig(self.ui.ct_conteudo)
+        self.mainconfig(self.ct_conteudo)
     
     def editarUser(self):
         self.janelaConfig()

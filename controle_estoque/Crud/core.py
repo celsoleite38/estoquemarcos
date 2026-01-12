@@ -42,6 +42,7 @@ class Conexao(object):
             'mysql+mysqlconnector://{}:{}@{}/{}?charset=utf8'
             .format(self.DbUser, self.DbPassword,
                     self.DbHost, self.DbName),
+            connect_args={'connect_timeout': 5},
             echo=False)
 
         # Criando Sessao
